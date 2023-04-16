@@ -26,14 +26,19 @@
       <li class="list-group-item">Item 2</li>
       <li class="list-group-item">Item 3</li>
       <li class="list-group-item">Item 4</li>
-      <li id="aaa";>Item 4</li>
     </ul>
    </div>
   </div>
 
 </body>
 <script>
-   var aaa=document.getElementById("aaa");
-   aaa.style.backgroundColor="blue";
+  var items=document.querySelectorAll(".list-group-item");
+  items[1].style.color="green";
+  var len=items.length;
+  for(var i=0;i<len;i++){
+    if(i%2!=0){
+      items[i].style.backgroundColor="green";
+    }
+  }
 </script>
 </html>
