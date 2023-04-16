@@ -32,13 +32,28 @@
 
 </body>
 <script>
-  var items=document.querySelectorAll(".list-group-item");
-  items[1].style.color="green";
-  var len=items.length;
-  for(var i=0;i<len;i++){
-    if(i%2!=0){
-      items[i].style.backgroundColor="green";
-    }
-  }
+// parentElement
+// lastelementchild
+// lastchild
+// createchild
+// firstelementchild
+// firstchild
+// nextsibling
+// nextelementsibling
+// previoussibling
+// previouselementsibling
+// createelement
+// setAttribute
+// createtesxtnode
+// appendchild
+var items=document.querySelector("#items");
+//var parent=items.firstElementChild;
+var child=document.createElement('h2');
+child.innerHTML="HEllo"
+items.insertAdjacentElement("beforebegin",child);
+
+
+var headertitle =document.querySelector("#header-title");
+headertitle.innerHTML="HEllo "+headertitle.innerHTML;
 </script>
 </html>
