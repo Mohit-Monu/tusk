@@ -12,7 +12,7 @@
       font-size: 20px;
     }
     .box {
-      height: 500px;
+      height: wrap;
       width: 50%;
       margin-left: 25%;
       background-color: aliceblue;
@@ -32,6 +32,13 @@
     button:hover {
       background-color: gray;
     }
+    .boxx {
+      width: 90%;
+    }
+    .deleteBtn {
+      width: fit-content;
+      height: fit-content;
+    }
   </style>
   <body
     style="
@@ -39,33 +46,36 @@
     "
   >
     <div class="box">
-      <center>
-        <h2 style="color: orange">Request for a call back.</h2>
+      <h2 style="color: orange">Request for a call back.</h2>
+      <br />
+      <h4>Please Fill up the form so we can contact you</h4>
+      <br />
+      <hr />
+      <form class="pure-form">
+        Name:
         <br />
-        <h4>Please Fill up the form so we can contact you</h4>
+        <input type="text" id="name" required />
         <br />
-        <hr />
-        <form class="pure-form">
-          Name:
-          <br />
-          <input type="text" id="name" required />
-          <br />
-          Email-id:
-          <br />
-          <input type="text" id="email" required />
-          <br />
-          Phone-No:
-          <br />
-          <input type="text" id="phone" required />
-          <br />
-          Time to Call:
-          <br />
-          <input type="datetime-local" id="time" required />
-          <br />
-          <button type="submit" id="submitbtn"><b>Submit.</b></button>
-        </form>
-        <h2 id="showsdetails"></h2>
-      </center>
+        Email-id:
+        <br />
+        <input type="text" id="email" required />
+        <br />
+        Phone-No:
+        <br />
+        <input type="text" id="phone" required />
+        <br />
+        Time to Call:
+        <br />
+        <input type="datetime-local" id="time" required />
+        <br />
+        <button type="submit" id="submitbtn"><b>Submit.</b></button>
+      </form>
+      <div class="boxx">
+        <!-- <div>
+          <h3>dgedgdsg</h3>
+          <input type="button" value="Delete" class="deleteBtn" />
+        </div> -->
+      </div>
     </div>
   </body>
   <script>
@@ -73,7 +83,7 @@
     var emaila = document.getElementById("email");
     var phonea = document.getElementById("phone");
     var timea = document.getElementById("time");
-    var showsdetailsa=document.getElementById('showsdetails');
+    //var showsdetailsa=document.getElementById('showsdetails');
     document
       .querySelector("form.pure-form")
       .addEventListener("submit", function (e) {
@@ -83,18 +93,64 @@
           console.log(emaila.value);
           console.log(phonea.value);
           console.log(timea.value);
-          var myobj={
-            name:namea.value,
-            email:emaila.value,
-            phone:phonea.value,
-            time:timea.value,
+          var myobj = {
+            name: namea.value,
+            email: emaila.value,
+            phone: phonea.value,
+            time: timea.value,
+          };
+          var stringofobj = JSON.stringify(myobj);
+          localStorage.setItem(phonea.value, stringofobj);
+          var showsdetailsa = document.createElement("h3");
+          var div1 = document.createElement("div");
+          var deleteBtn = document.createElement("input");
+          var boxxa = document.querySelector(".boxx");
+          deleteBtn.classList.add("deleteBtn");
+          deleteBtn.value = "Delete";
+          deleteBtn.type = "button";
+          var out =
+            namea.value +
+            " - " +
+            emaila.value +
+            " - " +
+            phonea.value +
+            " - " +
+            timea.value;
+          out = out.toString();
+          showsdetailsa.innerHTML = out;
+          boxxa.appendChild(div1);
+          div1.appendChild(showsdetailsa);
+          div1.appendChild(deleteBtn);
+          deleteBtn.addEventListener("click", deletef);
+          function deletef(e) {
+            var li = e.target.parentElement;
+            var inputt = li.firstChild;
+
+            inputt = inputt.textContent;
+
+            var count = 0;
+            var str = "";
+            for (var i = 0; i < inputt.length; i++) {
+              if (count == 2) {
+                if (inputt[i] == "-") {
+                  break;
+                }
+                str += inputt[i];
+              }
+              if (inputt[i] == "-") {
+                count++;
+              }
+            }
+            var keyy = "";
+            for (var i = 1; i < str.length - 1; i++) {
+              keyy += str[i];
+            }
+            console.log(keyy);
+            localStorage.removeItem(keyy);
+
+
+            boxxa.removeChild(li);
           }
-          var stringofobj=JSON.stringify(myobj);
-          console.log(myobj);
-          localStorage.setItem(namea.value,stringofobj);
-          var out=namea.value+" - "+emaila.value+" - "+phonea.value+" - "+timea.value;
-          out=out.toString();
-          showsdetailsa.innerText =out;
         }
       });
   </script>
