@@ -4,110 +4,86 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-      crossorigin="anonymous"
-    />
+    <title>Request a call back</title>
   </head>
-  <header id="main-header" class="bg-success text-white p-4 mb-3">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-6">
-            <h1 id="header-title">Item Lister</h1>
-        </div>
-        <div class="col-md-6 align-self-center">
-            <input type="text" class="form-control" id="filter" placeholder="Search Items...">
-        </div>
-      </div>
+  <style>
+    * {
+      margin: 5px;
+      font-size: 20px;
+    }
+    .box {
+      height: 500px;
+      width: 50%;
+      margin-left: 25%;
+      background-color: aliceblue;
+      border: 2px solid red;
+    }
+    input {
+      width: 80%;
+      height: 20px;
+    }
+    button {
+      width: 90%;
+      margin-top: 10px;
+      height: 40px;
+      color: red;
+      background-color: white;
+    }
+    button:hover {
+      background-color: gray;
+    }
+  </style>
+  <body
+    style="
+      background-image: url(https://cdn.pixabay.com/photo/2018/05/12/19/20/mosaic-3394375__340.jpg);
+    "
+  >
+    <div class="box">
+      <center>
+        <h2 style="color: orange">Request for a call back.</h2>
+        <br />
+        <h4>Please Fill up the form so we can contact you</h4>
+        <br />
+        <hr />
+        <form class="pure-form">
+          Name:
+          <br />
+          <input type="text" id="name" required />
+          <br />
+          Email-id:
+          <br />
+          <input type="text" id="email" required />
+          <br />
+          Phone-No:
+          <br />
+          <input type="text" id="phone" required />
+          <br />
+          Time to Call:
+          <br />
+          <input type="datetime-local" id="time" required />
+          <br />
+          <button type="submit" id="submitbtn"><b>Submit.</b></button>
+        </form>
+      </center>
     </div>
-  </header>
-  <div class="container">
-   <div id="main" class="card card-body">
-    <h2 class="title">Add Items</h2>
-    <form id="addForm" class="form-inline mb-3">
-      <input type="text" class="form-control mr-2" id="item">
-      <input type="submit" class="btn btn-dark" value="Submit">
-    </form>
-    <h2 class="title">Items</h2>
-    <ul id="items" class="list-group">
-      <li class="list-group-item">Item 1 <button class="btn btn-danger btn-sm float-right delete">X</button></li>
-      <li class="list-group-item">Item 2 <button class="btn btn-danger btn-sm float-right delete">X</button></li>
-      <li class="list-group-item">Item 3 <button class="btn btn-danger btn-sm float-right delete">X</button></li>
-      <li class="list-group-item">Item 4 <button class="btn btn-danger btn-sm float-right delete">X</button></li>
-    </ul>
-   </div>
-  </div>
   </body>
   <script>
-var form = document.getElementById('addForm');
-var itemList = document.getElementById('items');
-var filter = document.getElementById('filter');
-
-// Form submit event
-form.addEventListener('submit', addItem);
-// Delete event
-itemList.addEventListener('click', removeItem);
-// Filter event
-filter.addEventListener('keyup', filterItems);
-
-// Add item
-function addItem(e){
-  e.preventDefault();
-
-  // Get input value
-  var newItem = document.getElementById('item').value;
-
-  // Create new li element
-  var li = document.createElement('li');
-  // Add class
-  li.className = 'list-group-item';
-  // Add text node with input value
-  li.appendChild(document.createTextNode(newItem));
-
-  // Create del button element
-  var deleteBtn = document.createElement('button');
-
-  // Add classes to del button
-  deleteBtn.className = 'btn btn-danger btn-sm float-right delete';
-
-  // Append text node
-  deleteBtn.appendChild(document.createTextNode('X'));
-
-  // Append button to li
-  li.appendChild(deleteBtn);
-
-  // Append li to list
-  itemList.appendChild(li);
-}
-
-// Remove item
-function removeItem(e){
-  if(e.target.classList.contains('delete')){
-    if(confirm('Are You Sure?')){
-      var li = e.target.parentElement;
-      itemList.removeChild(li);
-    }
-  }
-}
-
-// Filter Items
-function filterItems(e){
-  // convert text to lowercase
-  var text = e.target.value.toLowerCase();
-  // Get lis
-  var items = itemList.getElementsByTagName('li');
-  // Convert to an array
-  Array.from(items).forEach(function(item){
-    var itemName = item.firstChild.textContent;
-    if(itemName.toLowerCase().indexOf(text) != -1){
-      item.style.display = 'block';
-    } else {
-      item.style.display = 'none';
-    }
-  });
-}
+    var namea = document.getElementById("name");
+    var emaila = document.getElementById("email");
+    var phonea = document.getElementById("phone");
+    var timea = document.getElementById("time");
+    document
+      .querySelector("form.pure-form")
+      .addEventListener("submit", function (e) {
+        if (confirm("Are You Sure")) {
+          e.preventDefault();
+          console.log(namea.value);
+          console.log(emaila.value);
+          console.log(phonea.value);
+          console.log(timea.value);
+          var arr=[emaila.value,phonea.value,timea.value];
+          localStorage.setItem(namea.value,arr);
+        }
+      });
   </script>
 </html>
