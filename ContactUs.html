@@ -39,6 +39,10 @@
       width: fit-content;
       height: fit-content;
     }
+    .editBtn {
+      width: fit-content;
+      height: fit-content;
+    }
   </style>
   <body
     style="
@@ -66,7 +70,7 @@
         <br />
         Time to Call:
         <br />
-        <input type="datetime-local" id="time" required />
+        <input type="time" id="time" required />
         <br />
         <button type="submit" id="submitbtn"><b>Submit.</b></button>
       </form>
@@ -74,6 +78,7 @@
         <!-- <div>
           <h3>dgedgdsg</h3>
           <input type="button" value="Delete" class="deleteBtn" />
+          <input type="button" value="Edit" class="editBtn" />
         </div> -->
       </div>
     </div>
@@ -83,46 +88,53 @@
     var emaila = document.getElementById("email");
     var phonea = document.getElementById("phone");
     var timea = document.getElementById("time");
-    //var showsdetailsa=document.getElementById('showsdetails');
-    document
-      .querySelector("form.pure-form")
-      .addEventListener("submit", function (e) {
-        if (confirm("Are You Sure")) {
-          e.preventDefault();
-          console.log(namea.value);
-          console.log(emaila.value);
-          console.log(phonea.value);
-          console.log(timea.value);
-          var myobj = {
-            name: namea.value,
-            email: emaila.value,
-            phone: phonea.value,
-            time: timea.value,
-          };
-          var stringofobj = JSON.stringify(myobj);
-          localStorage.setItem(phonea.value, stringofobj);
-          var showsdetailsa = document.createElement("h3");
-          var div1 = document.createElement("div");
-          var deleteBtn = document.createElement("input");
-          var boxxa = document.querySelector(".boxx");
-          deleteBtn.classList.add("deleteBtn");
-          deleteBtn.value = "Delete";
-          deleteBtn.type = "button";
-          var out =
-            namea.value +
-            " - " +
-            emaila.value +
-            " - " +
-            phonea.value +
-            " - " +
-            timea.value;
-          out = out.toString();
-          showsdetailsa.innerHTML = out;
-          boxxa.appendChild(div1);
-          div1.appendChild(showsdetailsa);
-          div1.appendChild(deleteBtn);
-          deleteBtn.addEventListener("click", deletef);
-          function deletef(e) {
+    document.querySelector("form.pure-form").addEventListener("submit", addele);
+    function addele(e) {
+      if (confirm("Are You Sure")) {
+        e.preventDefault();
+        console.log(namea.value);
+        console.log(emaila.value);
+        console.log(phonea.value);
+        console.log(timea.value);
+        var myobj = {
+          name: namea.value,
+          email: emaila.value,
+          phone: phonea.value,
+          time: timea.value,
+        };
+        var stringofobj = JSON.stringify(myobj);
+        localStorage.setItem(phonea.value, stringofobj);
+        var showsdetailsa = document.createElement("h3");
+        var div1 = document.createElement("div");
+        var deleteBtn = document.createElement("input");
+        var editBtn = document.createElement("input");
+        editBtn.classList.add("editBtn");
+        editBtn.value = "Edit";
+        editBtn.type = "button";
+
+        var boxxa = document.querySelector(".boxx");
+        deleteBtn.classList.add("deleteBtn");
+        deleteBtn.value = "Delete";
+        deleteBtn.type = "button";
+        var out =
+          namea.value +
+          " - " +
+          emaila.value +
+          " - " +
+          phonea.value +
+          " - " +
+          timea.value;
+        out = out.toString();
+        showsdetailsa.innerHTML = out;
+        boxxa.appendChild(div1);
+        div1.appendChild(showsdetailsa);
+        div1.appendChild(deleteBtn);
+        div1.appendChild(editBtn);
+        editBtn.addEventListener("click", editf);
+
+        deleteBtn.addEventListener("click", deletef);
+        function deletef(e) {
+          if (confirm("Are you sure to delete")) {
             var li = e.target.parentElement;
             var inputt = li.firstChild;
 
@@ -148,10 +160,81 @@
             console.log(keyy);
             localStorage.removeItem(keyy);
 
-
             boxxa.removeChild(li);
           }
         }
-      });
+        function editf(e) {
+          var li = e.target.parentElement;
+            var strr = li.firstChild;
+            strr=strr.textContent;
+    var editname="";
+    var editemail="";
+    var editphone="";
+    var edittime="";
+    var count=0;
+    var feditname="";
+    var feditemail="";
+    var feditphone="";
+    var fedittime="";
+     for(var i=0;i<strr.length;i++){
+        if(strr[i]=="-"){
+            
+            count++;
+        }else
+        if(count==0){
+            editname+=strr[i];
+
+        }else if(count==1){
+            editemail+=strr[i];
+
+        }else if(count==2){
+            editphone+=strr[i];
+        }else if(count==3){
+            edittime+=strr[i];
+        }
+
+     }
+     for(var i=0;i<editname.length;i++){
+        if(editname[i]==" "){
+
+        }else{
+            feditname+=editname[i];
+        }
+     }
+     for(var i=0;i<editemail.length;i++){
+        if(editemail[i]==" "){
+
+        }else{
+            feditemail+=editemail[i];
+        }
+     }
+     for(var i=0;i<editphone.length;i++){
+        if(editphone[i]==" "){
+
+        }else{
+            feditphone+=editphone[i];
+        }
+     }
+     for(var i=0;i<edittime.length;i++){
+        if(edittime[i]==" "){
+
+        }else{
+            fedittime+=edittime[i];
+        }
+     }
+     namea.value=(feditname);
+     emaila.value=(feditemail);
+     phonea.value=(feditphone);
+     timea.value=(fedittime);
+     
+     
+     
+     console.log(feditemail,feditphone,feditname,fedittime);
+            
+
+        }
+      }
+    }
   </script>
 </html>
+
