@@ -64,6 +64,7 @@
           <br />
           <button type="submit" id="submitbtn"><b>Submit.</b></button>
         </form>
+        <h2 id="showsdetails"></h2>
       </center>
     </div>
   </body>
@@ -72,6 +73,7 @@
     var emaila = document.getElementById("email");
     var phonea = document.getElementById("phone");
     var timea = document.getElementById("time");
+    var showsdetailsa=document.getElementById('showsdetails');
     document
       .querySelector("form.pure-form")
       .addEventListener("submit", function (e) {
@@ -90,6 +92,9 @@
           var stringofobj=JSON.stringify(myobj);
           console.log(myobj);
           localStorage.setItem(namea.value,stringofobj);
+          var out=namea.value+" - "+emaila.value+" - "+phonea.value+" - "+timea.value;
+          out=out.toString();
+          showsdetailsa.innerText =out;
         }
       });
   </script>
