@@ -81,8 +81,15 @@
           console.log(emaila.value);
           console.log(phonea.value);
           console.log(timea.value);
-          var arr=[emaila.value,phonea.value,timea.value];
-          localStorage.setItem(namea.value,arr);
+          var myobj={
+            name:namea.value,
+            email:emaila.value,
+            phone:phonea.value,
+            time:timea.value,
+          }
+          var stringofobj=JSON.stringify(myobj);
+          console.log(myobj);
+          localStorage.setItem(namea.value,stringofobj);
         }
       });
   </script>
