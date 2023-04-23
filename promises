@@ -1,0 +1,36 @@
+const posts=["POST1","POST2"];
+let lastactivity=""
+
+
+function createPost(){
+  return new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+    posts.push("post");
+    resolve()
+    },1000)
+  });
+}
+function updateLastUserActivityTime(){
+  return new Promise((resolve,reject)=>{
+    setTimeout(()=> {
+      lastactivity=Date.now();
+      resolve();
+    }, 1000);
+  })
+}
+function getPosts(){
+  setTimeout(()=>{
+    posts.forEach((post,index)=>{
+      console.log(post);
+      
+    },1000)
+    console.log(lastactivity);
+  })
+}
+const promise1=createPost();
+const promise2=updateLastUserActivityTime();
+Promise.all([promise1,promise2])
+.then(updateLastUserActivityTime)
+.then(getPosts)
+
+
