@@ -54,7 +54,7 @@
       <h2 style="color: orange">Request for a call back.</h2>
       <br />
       <h4>Please Fill up the form so we can contact you</h4>
-      <br />
+      <br >
       <hr />
       <form class="pure-form">
         Name:
@@ -76,11 +76,7 @@
         <button type="submit" id="submitbtn"><b>Submit.</b></button>
       </form>
       <div class="boxx">
-        <!-- <div>
-          <h3>dgedgdsg</h3>
-          <input type="button" value="Delete" class="deleteBtn" />
-          <input type="button" value="Edit" class="editBtn" />
-        </div> -->
+
       </div>
     </div>
   </body>
@@ -89,8 +85,12 @@
     var emaila = document.getElementById("email");
     var phonea = document.getElementById("phone");
     var timea = document.getElementById("time");
+    var deleteBtn = document.querySelector(".deleteBtn");
     document.querySelector("form.pure-form").addEventListener("submit", addele);
-
+   
+    window.addEventListener("DOMContentLoaded", () => {
+      pageLoader();
+    });
     function pageLoader() {
       axios
         .get(
@@ -125,12 +125,36 @@
             div1.appendChild(showsdetailsa);
             div1.appendChild(deleteBtn);
             div1.appendChild(editBtn);
+            deleteBtn.addEventListener("click", delf);
           });
-        }).catch((err)=>{
-            console.log(err);
+        })
+        .catch((err) => {
+          console.log(err);
         });
     }
-    pageLoader();
+
+    function delf(e){
+        e.preventDefault();
+        var li = e.target.parentElement;
+        var inputt = li.firstChild;
+        inputt = inputt.textContent;
+        var findid="";
+        for(var i=0;i<inputt.length;i++){
+            if(inputt[i]==" "){
+                break;
+            }else{
+                findid+=inputt[i];
+            }
+        }
+        console.log(findid);
+        const config={
+            method:"delete",
+            url:"https://crudcrud.com/api/44e5c19399404b55a1f787f9875854a2/appointment/"+findid,
+        }
+        axios(config).then((res)=>{console.log(res)}).catch((err)=>{console.log(err)});
+        boxxa.removeChild(li);
+    }
+
     function addele(e) {
       if (confirm("Are You Sure")) {
         e.preventDefault();
@@ -153,33 +177,7 @@
             console.log("email" + res.data.email);
             console.log("phone:" + res.data.phone);
             console.log("time:" + res.data.time);
-            var showsdetailsa = document.createElement("h3");
-            var div1 = document.createElement("div");
-            var deleteBtn = document.createElement("input");
-            var editBtn = document.createElement("input");
-            editBtn.classList.add("editBtn");
-            editBtn.value = "Edit";
-            editBtn.type = "button";
-            var boxxa = document.querySelector(".boxx");
-            deleteBtn.classList.add("deleteBtn");
-            deleteBtn.value = "Delete";
-            deleteBtn.type = "button";
-            var out =
-              res.data._id +
-              " - " +
-              res.data.name +
-              " - " +
-              res.data.email +
-              " - " +
-              res.data.phone +
-              " - " +
-              res.data.time;
-            out = out.toString();
-            showsdetailsa.innerHTML = out;
-            boxxa.appendChild(div1);
-            div1.appendChild(showsdetailsa);
-            div1.appendChild(deleteBtn);
-            div1.appendChild(editBtn);
+            pageLoader();
           })
           .catch((err) => {
             console.log(err);
