@@ -54,7 +54,7 @@
       <h2 style="color: orange">Request for a call back.</h2>
       <br />
       <h4>Please Fill up the form so we can contact you</h4>
-      <br >
+      <br />
       <hr />
       <form class="pure-form">
         Name:
@@ -76,7 +76,11 @@
         <button type="submit" id="submitbtn"><b>Submit.</b></button>
       </form>
       <div class="boxx">
-
+        <!-- <div>
+          <h3>dgedgdsg</h3>
+          <input type="button" value="Delete" class="deleteBtn" />
+          <input type="button" value="Edit" class="editBtn" />
+        </div> -->
       </div>
     </div>
   </body>
@@ -85,79 +89,15 @@
     var emaila = document.getElementById("email");
     var phonea = document.getElementById("phone");
     var timea = document.getElementById("time");
-    var deleteBtn = document.querySelector(".deleteBtn");
     document.querySelector("form.pure-form").addEventListener("submit", addele);
-   
-    window.addEventListener("DOMContentLoaded", () => {
-      pageLoader();
-    });
-    function pageLoader() {
-      axios
-        .get(
-          "https://crudcrud.com/api/44e5c19399404b55a1f787f9875854a2/appointment"
-        )
-        .then((res) => {
-          res.data.forEach((element) => {
-            var showsdetailsa = document.createElement("h3");
-            var div1 = document.createElement("div");
-            var deleteBtn = document.createElement("input");
-            var editBtn = document.createElement("input");
-            editBtn.classList.add("editBtn");
-            editBtn.value = "Edit";
-            editBtn.type = "button";
-            var boxxa = document.querySelector(".boxx");
-            deleteBtn.classList.add("deleteBtn");
-            deleteBtn.value = "Delete";
-            deleteBtn.type = "button";
-            var out =
-              element._id +
-              " - " +
-              element.name +
-              " - " +
-              element.email +
-              " - " +
-              element.phone +
-              " - " +
-              element.time;
-            out = out.toString();
-            showsdetailsa.innerHTML = out;
-            boxxa.appendChild(div1);
-            div1.appendChild(showsdetailsa);
-            div1.appendChild(deleteBtn);
-            div1.appendChild(editBtn);
-            deleteBtn.addEventListener("click", delf);
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-
-    function delf(e){
-        e.preventDefault();
-        var li = e.target.parentElement;
-        var inputt = li.firstChild;
-        inputt = inputt.textContent;
-        var findid="";
-        for(var i=0;i<inputt.length;i++){
-            if(inputt[i]==" "){
-                break;
-            }else{
-                findid+=inputt[i];
-            }
-        }
-        console.log(findid);
-        const config={
-            method:"delete",
-            url:"https://crudcrud.com/api/44e5c19399404b55a1f787f9875854a2/appointment/"+findid,
-        }
-        axios(config).then((res)=>{console.log(res)}).catch((err)=>{console.log(err)});
-        boxxa.removeChild(li);
-    }
-
     function addele(e) {
+
       if (confirm("Are You Sure")) {
         e.preventDefault();
+        console.log(namea.value);
+        console.log(emaila.value);
+        console.log(phonea.value);
+        console.log(timea.value);
         var myobj = {
           name: namea.value,
           email: emaila.value,
@@ -165,23 +105,124 @@
           time: timea.value,
         };
         var stringofobj = JSON.stringify(myobj);
-        const config = {
-          method: "POST",
-          url: "https://crudcrud.com/api/44e5c19399404b55a1f787f9875854a2/appointment",
-          data: myobj,
-        };
-        axios(config)
-          .then((res) => {
-            console.log("id:" + res.data._id);
-            console.log("name:" + res.data.name);
-            console.log("email" + res.data.email);
-            console.log("phone:" + res.data.phone);
-            console.log("time:" + res.data.time);
-            pageLoader();
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        
+        localStorage.setItem(phonea.value, stringofobj);
+        var showsdetailsa = document.createElement("h3");
+        var div1 = document.createElement("div");
+        var deleteBtn = document.createElement("input");
+        var editBtn = document.createElement("input");
+        editBtn.classList.add("editBtn");
+        editBtn.value = "Edit";
+        editBtn.type = "button";
+
+        var boxxa = document.querySelector(".boxx");
+        deleteBtn.classList.add("deleteBtn");
+        deleteBtn.value = "Delete";
+        deleteBtn.type = "button";
+        var out =
+          namea.value +
+          " - " +
+          emaila.value +
+          " - " +
+          phonea.value +
+          " - " +
+          timea.value;
+        out = out.toString();
+        showsdetailsa.innerHTML = out;
+        boxxa.appendChild(div1);
+        div1.appendChild(showsdetailsa);
+        div1.appendChild(deleteBtn);
+        div1.appendChild(editBtn);
+        editBtn.addEventListener("click", editf);
+
+        deleteBtn.addEventListener("click", deletef);
+        function deletef(e) {
+          if (confirm("Are you sure to delete")) {
+            var li = e.target.parentElement;
+            var inputt = li.firstChild;
+
+            inputt = inputt.textContent;
+
+            var count = 0;
+            var str = "";
+            for (var i = 0; i < inputt.length; i++) {
+              if (count == 2) {
+                if (inputt[i] == "-") {
+                  break;
+                }
+                str += inputt[i];
+              }
+              if (inputt[i] == "-") {
+                count++;
+              }
+            }
+            var keyy = "";
+            for (var i = 1; i < str.length - 1; i++) {
+              keyy += str[i];
+            }
+            console.log(keyy);
+            localStorage.removeItem(keyy);
+
+            boxxa.removeChild(li);
+          }
+        }
+        function editf(e) {
+          var li = e.target.parentElement;
+          var strr = li.firstChild;
+          strr = strr.textContent;
+          var editname = "";
+          var editemail = "";
+          var editphone = "";
+          var edittime = "";
+          var count = 0;
+          var feditname = "";
+          var feditemail = "";
+          var feditphone = "";
+          var fedittime = "";
+          for (var i = 0; i < strr.length; i++) {
+            if (strr[i] == "-") {
+              count++;
+            } else if (count == 0) {
+              editname += strr[i];
+            } else if (count == 1) {
+              editemail += strr[i];
+            } else if (count == 2) {
+              editphone += strr[i];
+            } else if (count == 3) {
+              edittime += strr[i];
+            }
+          }
+          for (var i = 0; i < editname.length; i++) {
+            if (editname[i] == " ") {
+            } else {
+              feditname += editname[i];
+            }
+          }
+          for (var i = 0; i < editemail.length; i++) {
+            if (editemail[i] == " ") {
+            } else {
+              feditemail += editemail[i];
+            }
+          }
+          for (var i = 0; i < editphone.length; i++) {
+            if (editphone[i] == " ") {
+            } else {
+              feditphone += editphone[i];
+            }
+          }
+          for (var i = 0; i < edittime.length; i++) {
+            if (edittime[i] == " ") {
+            } else {
+              fedittime += edittime[i];
+            }
+          }
+          namea.value = feditname;
+          emaila.value = feditemail;
+          phonea.value = feditphone;
+          timea.value = fedittime;
+
+          console.log(feditemail, feditphone, feditname, fedittime);
+        }
       }
     }
   </script>
