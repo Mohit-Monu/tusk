@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Request a call back</title>
+  </head>
+  <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+  <style>
+    * {
+      margin: 5px;
+      font-size: 20px;
+    }
+    .box {
+      height: wrap;
+      width: 50%;
+      margin-left: 25%;
+      background-color: aliceblue;
+      border: 2px solid red;
+    }
+    input {
+      width: 80%;
+      height: 20px;
+    }
+    button {
+      width: 90%;
+      margin-top: 10px;
+      height: 40px;
+      color: red;
+      background-color: white;
+    }
+    button:hover {
+      background-color: gray;
+    }
+    .boxx {
+      width: 90%;
+    }
+    .deleteBtn {
+      width: fit-content;
+      height: fit-content;
+    }
+    .editBtn {
+      width: fit-content;
+      height: fit-content;
+    }
+  </style>
+  <body
+    style="
+      background-image: url(https://cdn.pixabay.com/photo/2018/05/12/19/20/mosaic-3394375__340.jpg);
+    "
+  >
+    <div class="box">
+      <h2 style="color: orange">Request for a call back.</h2>
+      <br />
+      <h4>Please Fill up the form so we can contact you</h4>
+      <br />
+      <hr />
+      <form class="pure-form">
+        Name:
+        <br />
+        <input type="text" id="name" required />
+        <br />
+        Email-id:
+        <br />
+        <input type="text" id="email" required />
+        <br />
+        Phone-No:
+        <br />
+        <input type="text" id="phone" required />
+        <br />
+        Time to Call:
+        <br />
+        <input type="time" id="time" required />
+        <br />
+        <button type="submit" id="submitbtn"><b>Submit.</b></button>
+      </form>
+      <div class="boxx">
+        <!-- <div>
+          <h3>dgedgdsg</h3>
+          <input type="button" value="Delete" class="deleteBtn" />
+          <input type="button" value="Edit" class="editBtn" />
+        </div> -->
+      </div>
+    </div>
+  </body>
+  <script>
+    var namea = document.getElementById("name");
+    var emaila = document.getElementById("email");
+    var phonea = document.getElementById("phone");
+    var timea = document.getElementById("time");
+    document.querySelector("form.pure-form").addEventListener("submit", addele);
+    function addele(e) {
+      if (confirm("Are You Sure")) {
+        e.preventDefault();
+        var myobj = {
+          name: namea.value,
+          email: emaila.value,
+          phone: phonea.value,
+          time: timea.value,
+        };
+        var stringofobj = JSON.stringify(myobj);
+        const config = {
+          method: "POST",
+          url: "https://crudcrud.com/api/44e5c19399404b55a1f787f9875854a2/appointment",
+          data: myobj,
+        };
+        axios(config)
+          .then((res) => {
+            console.log("id:"+res.data._id);
+            console.log("name:"+res.data.name);
+            console.log("email"+res.data.email);
+            console.log("phone:"+res.data.phone);
+            console.log("time:"+res.data.time);
+            var showsdetailsa = document.createElement("h3");
+            var div1 = document.createElement("div");
+            var deleteBtn = document.createElement("input");
+            var editBtn = document.createElement("input");
+            editBtn.classList.add("editBtn");
+            editBtn.value = "Edit";
+            editBtn.type = "button";
+            var boxxa = document.querySelector(".boxx");
+            deleteBtn.classList.add("deleteBtn");
+            deleteBtn.value = "Delete";
+            deleteBtn.type = "button";
+            var out =
+              res.data._id +
+              " - " +
+              res.data.name +
+              " - " +
+              res.data.email +
+              " - " +
+              res.data.phone +
+              " - " +
+              res.data.time;
+            out = out.toString();
+            showsdetailsa.innerHTML = out;
+            boxxa.appendChild(div1);
+            div1.appendChild(showsdetailsa);
+            div1.appendChild(deleteBtn);
+            div1.appendChild(editBtn);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    }
+  </script>
+</html>
