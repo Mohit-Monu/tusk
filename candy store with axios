@@ -73,54 +73,65 @@
       pageLoader();
     });
     function pageLoader() {
-      axios.get(candy).then((res) => {
-        res.data.forEach((element) => {
-          var showsdetailsa = document.createElement("h3");
-          var div1 = document.createElement("div");
-          var buy1 = document.createElement("input");
-          var buy2 = document.createElement("input");
-          var buy3 = document.createElement("input");
+      axios
+        .get(candy)
+        .then((res) => {
+          res.data.forEach((element) => {
+            var showsdetailsa = document.createElement("h3");
+            var div1 = document.createElement("div");
+            var buy1 = document.createElement("input");
+            var buy2 = document.createElement("input");
+            var buy3 = document.createElement("input");
 
-          buy1.type = "button";
-          buy1.classList = "btn bg-danger btn-lg buy1 ";
-          buy1.value = "Buy 1";
+            buy1.type = "button";
+            buy1.classList = "btn bg-danger btn-lg buy1 ";
+            buy1.value = "Buy 1";
 
-          buy2.type = "button";
-          buy2.classList = "btn bg-danger btn-lg buy2 ";
-          buy2.value = "Buy 2";
+            buy2.type = "button";
+            buy2.classList = "btn bg-danger btn-lg buy2 ";
+            buy2.value = "Buy 2";
 
-          buy3.type = "button";
-          buy3.classList = "btn bg-danger btn-lg buy3 ";
-          buy3.value = "Buy 3";
+            buy3.type = "button";
+            buy3.classList = "btn bg-danger btn-lg buy3 ";
+            buy3.value = "Buy 3";
 
-          var boxxa = document.querySelector(".boxx");
-          var out =
-            element._id +
-            " - " +
-            element.name +
-            " - " +
-            element.description +
-            " - " +
-            element.price +
-            " - " +
-            element.quantity+" - ";
-          out = out.toString();
-          showsdetailsa.innerHTML = out;
-          boxxa.appendChild(div1);
-          div1.appendChild(showsdetailsa);
-          div1.appendChild(buy1);
-          div1.appendChild(buy2);
-          div1.appendChild(buy3);
-          buy1.addEventListener("click",sold1);
-          buy2.addEventListener("click",sold2);
-          buy3.addEventListener("click",sold3);
-
+            var boxxa = document.querySelector(".boxx");
+            var out =
+              element._id +
+              " - " +
+              element.name +
+              " - " +
+              element.description +
+              " - " +
+              element.price +
+              " - " +
+              element.quantity +
+              " - ";
+            out = out.toString();
+            showsdetailsa.innerHTML = out;
+            boxxa.appendChild(div1);
+            div1.appendChild(showsdetailsa);
+            div1.appendChild(buy1);
+            div1.appendChild(buy2);
+            div1.appendChild(buy3);
+            buy1.addEventListener("click", sold1);
+            buy2.addEventListener("click", sold2);
+            buy3.addEventListener("click", sold3);
+          });
+        })
+        .catch((err) => {
+          console.log(err);
         });
-      });
     }
-
-    function addcan(e) {
-      e.preventDefault();
+    function removechild() {
+            return new Promise((resolve, reject) => {
+              while (divv.firstChild) {
+                divv.removeChild(divv.firstChild);
+              }
+              resolve();
+            });
+          }
+    function addcan() {
       var myobj = {
         name: namea.value,
         description: desca.value,
@@ -133,56 +144,10 @@
         data: myobj,
       };
       axios(config)
-        .then((res) => {
-          while (divv.firstChild) {
-            divv.removeChild(divv.firstChild);
-          }
-          axios.get(candy).then((res) => {
-            res.data.forEach((element) => {
-              var showsdetailsa = document.createElement("h3");
-              var div1 = document.createElement("div");
-              var buy1 = document.createElement("input");
-              var buy2 = document.createElement("input");
-              var buy3 = document.createElement("input");
-
-              buy1.type = "button";
-              buy1.classList = "btn bg-danger btn-lg buy1";
-              buy1.id = "buy1";
-              buy1.value = "Buy 1";
-
-              buy2.type = "button";
-              buy2.classList = "btn bg-danger btn-lg buy2";
-              buy2.value = "Buy 2";
-
-              buy3.type = "button";
-              buy3.classList = "btn bg-danger btn-lg buy3";
-              buy3.value = "Buy 3";
-
-              var boxxa = document.querySelector(".boxx");
-              var out =
-                element._id +
-                " - " +
-                element.name +
-                " - " +
-                element.description +
-                " - " +
-                element.price +
-                " - " +
-                element.quantity +
-                " - ";
-              out = out.toString();
-              showsdetailsa.innerHTML = out;
-              boxxa.appendChild(div1);
-              div1.appendChild(showsdetailsa);
-              div1.appendChild(buy1);
-              div1.appendChild(buy2);
-              div1.appendChild(buy3);
-              buy1.addEventListener("click",sold1);
-          buy2.addEventListener("click",sold2);
-          buy3.addEventListener("click",sold3);
-            });
-          });
+        .then(() => {
+          removechild().then(pageLoader)
         })
+
         .catch((err) => {
           console.log(err);
         });
@@ -191,173 +156,21 @@
       var li = e.target.parentElement;
       var inputt = li.firstChild;
       inputt = inputt.textContent;
-      var arr = [];
-      var str = "";
-      for (var i = 0; i < inputt.length; i++) {
-        if (inputt[i] == " ") {
-        } else if (inputt[i] == "-") {
-          arr.push(str);
-          str = "";
-        } else {
-          str += inputt[i];
-        }
-      }
-      if (arr[4] < 1) {
-        alert("quantity is less");
-      } else {
-        var myobj = {
-          name: arr[1],
-          description: arr[2],
-          price: arr[3],
-          quantity: arr[4] - 1,
-        };
-        let config = {
-          method: "PUT",
-          url: candy + "/" + arr[0],
-          data: myobj,
-        };
-        axios(config)
-          .then((res) => {
-            while (divv.firstChild) {
-              divv.removeChild(divv.firstChild);
-            }
-            axios.get(candy).then((res) => {
-              res.data.forEach((element) => {
-                var showsdetailsa = document.createElement("h3");
-                var div1 = document.createElement("div");
-                var buy1 = document.createElement("input");
-                var buy2 = document.createElement("input");
-                var buy3 = document.createElement("input");
-
-                buy1.type = "button";
-                buy1.classList = "btn bg-danger btn-lg buy1";
-                buy1.id = "buy1";
-                buy1.value = "Buy 1";
-
-                buy2.type = "button";
-                buy2.classList = "btn bg-danger btn-lg buy2";
-                buy2.value = "Buy 2";
-
-                buy3.type = "button";
-                buy3.classList = "btn bg-danger btn-lg buy3";
-                buy3.value = "Buy 3";
-
-                var boxxa = document.querySelector(".boxx");
-                var out =
-                  element._id +
-                  " - " +
-                  element.name +
-                  " - " +
-                  element.description +
-                  " - " +
-                  element.price +
-                  " - " +
-                  element.quantity+" - ";
-                out = out.toString();
-                showsdetailsa.innerHTML = out;
-                boxxa.appendChild(div1);
-                div1.appendChild(showsdetailsa);
-                div1.appendChild(buy1);
-                div1.appendChild(buy2);
-                div1.appendChild(buy3);
-                buy1.addEventListener("click",sold1);
-          buy2.addEventListener("click",sold2);
-          buy3.addEventListener("click",sold3);
-              });
-            });
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
+      sold(inputt,1);
     }
     function sold2(e) {
       var li = e.target.parentElement;
       var inputt = li.firstChild;
       inputt = inputt.textContent;
-      var arr = [];
-      var str = "";
-      for (var i = 0; i < inputt.length; i++) {
-        if (inputt[i] == " ") {
-        } else if (inputt[i] == "-") {
-          arr.push(str);
-          str = "";
-        } else {
-          str += inputt[i];
-        }
-      }
-      if (arr[4] < 2) {
-        alert("quantity is less");
-      } else {
-        var myobj = {
-          name: arr[1],
-          description: arr[2],
-          price: arr[3],
-          quantity: arr[4] - 2,
-        };
-        let config = {
-          method: "PUT",
-          url: candy + "/" + arr[0],
-          data: myobj,
-        };
-        axios(config)
-          .then((res) => {
-            while (divv.firstChild) {
-              divv.removeChild(divv.firstChild);
-            }
-            axios.get(candy).then((res) => {
-              res.data.forEach((element) => {
-                var showsdetailsa = document.createElement("h3");
-                var div1 = document.createElement("div");
-                var buy1 = document.createElement("input");
-                var buy2 = document.createElement("input");
-                var buy3 = document.createElement("input");
-
-                buy1.type = "button";
-                buy1.classList = "btn bg-danger btn-lg buy1";
-                buy1.id = "buy1";
-                buy1.value = "Buy 1";
-
-                buy2.type = "button";
-                buy2.classList = "btn bg-danger btn-lg buy2";
-                buy2.value = "Buy 2";
-
-                buy3.type = "button";
-                buy3.classList = "btn bg-danger btn-lg buy3";
-                buy3.value = "Buy 3";
-
-                var boxxa = document.querySelector(".boxx");
-                var out =
-                  element._id +
-                  " - " +
-                  element.name +
-                  " - " +
-                  element.description +
-                  " - " +
-                  element.price+" - "+
-                  element.quantity+" - ";
-                out = out.toString();
-                showsdetailsa.innerHTML = out;
-                boxxa.appendChild(div1);
-                div1.appendChild(showsdetailsa);
-                div1.appendChild(buy1);
-                div1.appendChild(buy2);
-                div1.appendChild(buy3);
-                buy1.addEventListener("click",sold1);
-          buy2.addEventListener("click",sold2);
-          buy3.addEventListener("click",sold3);
-              });
-            });
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
+      sold(inputt,2);
     }
     function sold3(e) {
       var li = e.target.parentElement;
       var inputt = li.firstChild;
       inputt = inputt.textContent;
+      sold(inputt,3);
+    }
+    function sold(inputt,s){
       var arr = [];
       var str = "";
       for (var i = 0; i < inputt.length; i++) {
@@ -369,14 +182,14 @@
           str += inputt[i];
         }
       }
-      if (arr[4] < 3) {
+      if (arr[4] < s) {
         alert("quantity is less");
       } else {
         var myobj = {
           name: arr[1],
           description: arr[2],
           price: arr[3],
-          quantity: arr[4] - 3,
+          quantity: arr[4] - s,
         };
         let config = {
           method: "PUT",
@@ -385,53 +198,7 @@
         };
         axios(config)
           .then((res) => {
-            while (divv.firstChild) {
-              divv.removeChild(divv.firstChild);
-            }
-            axios.get(candy).then((res) => {
-              res.data.forEach((element) => {
-                var showsdetailsa = document.createElement("h3");
-                var div1 = document.createElement("div");
-                var buy1 = document.createElement("input");
-                var buy2 = document.createElement("input");
-                var buy3 = document.createElement("input");
-
-                buy1.type = "button";
-                buy1.classList = "btn bg-danger btn-lg buy1";
-                buy1.id = "buy1";
-                buy1.value = "Buy 1";
-
-                buy2.type = "button";
-                buy2.classList = "btn bg-danger btn-lg buy2";
-                buy2.value = "Buy 2";
-
-                buy3.type = "button";
-                buy3.classList = "btn bg-danger btn-lg buy3";
-                buy3.value = "Buy 3";
-
-                var boxxa = document.querySelector(".boxx");
-                var out =
-                  element._id +
-                  " - " +
-                  element.name +
-                  " - " +
-                  element.description +
-                  " - " +
-                  element.price +
-                  " - " +
-                  element.quantity+" - ";
-                out = out.toString();
-                showsdetailsa.innerHTML = out;
-                boxxa.appendChild(div1);
-                div1.appendChild(showsdetailsa);
-                div1.appendChild(buy1);
-                div1.appendChild(buy2);
-                div1.appendChild(buy3);
-                buy1.addEventListener("click",sold1);
-          buy2.addEventListener("click",sold2);
-          buy3.addEventListener("click",sold3);
-              });
-            });
+          removechild().then(pageLoader)
           })
           .catch((err) => {
             console.log(err);
