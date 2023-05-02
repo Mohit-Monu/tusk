@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+        integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <title>Expense Tracker</title>
+</head>
+
+<body>
+    <header id="main-header" class="bg-success text-white p-4 mb-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h1 id="header-title">Resturent Menu System</h1>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div id="main" class="card card-body">
+
+            <form onsubmit="showuseronscreen(event)" id="addForm" class="form-inline mb-3">
+                <label class="title"> Dish Amount </label>
+                <input type="number" name="Amount" class="form-control mr-2" id="item" required>
+
+                <label class="title"> Dish Descripation </label>
+                <input type="text" name="Descripation" class="form-control mr-2" id="item1" required>
+
+                <label for="Table">table:</label>
+                <select id="Tables">
+                    <option value="Table1">Table1</option>
+                    <option value="Table2">Table2</option>
+                    <option value="Table3">Table3</option>
+                </select>
+
+                <input type="submit" class="btn btn-dark" value="Submit">
+            </form>
+            <h2 class="title">Table 1</h2>
+            <ul id="Table1" class="list-group"></ul>
+            <h2 class="title">Table 2</h2>
+            <ul id="Table2" class="list-group"></ul>
+            <h2 class="title">Table3</h2>
+            <ul id="Table3" class="list-group"></ul>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.4/axios.min.js"></script>
+    <script>
+        var urll="https://crudcrud.com/api/05c15d7903ba4adea35abd1185ccf24b/resurentsystem"
+        window.addEventListener("DOMContentLoaded", () => {
+            pageLoader();
+        });
+        async function pageLoader() {
+            var res = await axios.get(urll);
+            res.data.forEach((element) => {
+                console.log(element);
+                const childElem = document.createElement('li')
+                childElem.textContent = element._id + '-' + element.Amount + '-' + element.Descripation + '-' + element.TableNumber + "-";
+                const deleteButton = document.createElement('input')
+                deleteButton.type = "button"
+                deleteButton.value = 'Delete'
+                childElem.appendChild(deleteButton);
+                if (element.TableNumber == "Table1") {
+                    const parentElem = document.getElementById('Table1');
+                    parentElem.appendChild(childElem);
+                } else if (element.TableNumber == "Table2") {
+                    const parentElem = document.getElementById('Table2');
+                    parentElem.appendChild(childElem);
+                } else if (element.TableNumber == "Table3") {
+                    const parentElem = document.getElementById('Table3');
+                    parentElem.appendChild(childElem);
+                }
+                deleteButton.addEventListener("click", delf);
+            })
+        }
+        async function delf(e) {
+            try {
+                var li = e.target.parentElement;
+                var inputt = li.firstChild;
+                inputt = inputt.textContent;
+                var tem = "";
+                for (var i = 0; i < inputt.length; i++) {
+                    if (inputt[i] == "-") {
+                        break;
+                    } else {
+                        tem += inputt[i];
+                    }
+                }
+                console.log(tem);
+                const config = {
+                    method: "delete",
+                    url: urll +"/"+ tem,
+                }
+                var res = await axios(config);
+                await removechild();
+                await pageLoader();
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        async function showuseronscreen(event) {
+            const Amount = document.getElementById('item').value;
+            const Descripation = document.getElementById('item1').value;
+            const x = document.getElementById("Tables");
+            const TableNumber = x.options[x.selectedIndex].text;
+            const myobj = {
+                Amount,
+                Descripation,
+                TableNumber
+            }
+            try {
+                var response = await axios.post(urll, myobj);
+                await removechild();
+                await pageLoader();
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        function removechild() {
+            return new Promise((resolve, reject) => {
+                const parentElem = document.getElementById('Table1');
+                const parentElem2 = document.getElementById('Table2');
+                const parentElem3 = document.getElementById('Table3');
+
+                while (parentElem.firstChild) {
+                    parentElem.removeChild(parentElem.firstChild);
+                }
+                while (parentElem2.firstChild) {
+                    parentElem2.removeChild(parentElem2.firstChild);
+                }
+                while (parentElem3.firstChild) {
+                    parentElem3.removeChild(parentElem3.firstChild);
+                }
+                resolve();
+            });
+        }
+    </script>
+</body>
+
+</html>
