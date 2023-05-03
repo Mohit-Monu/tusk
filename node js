@@ -1,17 +1,42 @@
-const http=require('http');
-http.createServer((req,res)=>{
-    const url = req.url;
-    if(url==='/home'){
-        res.write('<html><title>Home</title><body><h1> Welcome home</h1></body></html>');
+const http = require('http');
+const fs = require('fs');
+http.createServer((req, res) => {
+    const method = req.method;
+    var linkk = ""
+    function data() {
+        return new Promise((resolve, reject) => {
+            fs.readFile('message.txt', 'utf-8', (err, item) => {
+                linkk = item
+                resolve();
+            })
+        })
+    }
+    function fetching() {
+        return new Promise((resolve, reject) => {
+            res.write('<html><head><title>Document</title></head><body><h1>' + linkk + '</h1><form method="POST"><input type="text" name="message"><input type="submit"></form></body></html>');
+            resolve();
+
+        })
+    }
+    async function authorization() {
+        await data();
+        await fetching();
+    }
+    authorization();
+    if (method === "POST") {
+        const body = [];
+        req.on('data', (chunck) => {
+            body.push(chunck);
+            // console.log(chunck)
+        })
+        req.on('end', () => {
+            const parsedBody = Buffer.concat(body).toString();
+            const message = parsedBody.split('=')[1];
+            fs.writeFileSync('message.txt', message);
+        })
+        res.statusCode = 302;
+        res.setHeader('Location', '/');
         return res.end();
     }
-    else if(url==='/about'){
-        res.write('<html><title>About us</title><body><h1> Welcome to About Us page</h1></body></html>');
-        return res.end();
-    }
-    else if(url==='/node'){
-        res.write('<html><title>Node</title><body><h1> Welcome to my Node Js project</h1></body></html>');
-        return res.end();
-    }
-    
-}).listen(4000)
+
+}).listen(4000);
